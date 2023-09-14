@@ -9,9 +9,12 @@ export const parseURL = (url : String) => {
     return match[1];
 }
 
-export const getData = async (videoID : String, apiKey : String) => {
+export const getData = async (videoID : String, apiKey : String | undefined) => { // adding "undefined" is an incredibly lazy fix. Replace ASAP!
     const fetchURL = `https://www.googleapis.com/youtube/v3/commentThreads?key=${apiKey}&textFormat=plainText&part=snippet&videoId=${videoID}&maxResults=1000`;
     const response = await fetch(fetchURL);
-    const data = await response.json();
-    return data;
+    if (response.ok) {
+        return Promise.resolve(response);
+    }
+    return Promise.reject("API Key error!");
 }
+
