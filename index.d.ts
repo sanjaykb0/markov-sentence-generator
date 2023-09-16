@@ -9,7 +9,7 @@ export interface CommentThreadListResponse {
     items: CommentThread[];
   }
   
-  interface CommentThread {
+export interface CommentThread {
     kind: string;
     etag: string;
     id: string;
