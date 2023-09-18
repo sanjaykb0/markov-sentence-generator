@@ -1,4 +1,4 @@
-import type { CommentThreadListResponse } from "../../index.d";
+import type { CommentThreadListResponse, Root } from "../../index.d";
 
 export const parseURL = (url : String) => {
     const r = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/
@@ -12,7 +12,7 @@ export const parseURL = (url : String) => {
 }
 
 export const getData = async (videoID : String, apiKey : String | undefined) => { // adding "undefined" is an incredibly lazy fix. Replace ASAP!
-    const jsonPageData : CommentThreadListResponse[] = [];
+    let jsonPageData : Root[] = []; 
     // const fetchURL = `https://www.googleapis.com/youtube/v3/commentThreads?key=${apiKey}&textFormat=plainText&part=snippet&videoId=${videoID}&maxResults=1000&pageToken=`;
     // const response = await fetch(fetchURL);
 
@@ -23,7 +23,7 @@ export const getData = async (videoID : String, apiKey : String | undefined) => 
         const fetchURL = `https://www.googleapis.com/youtube/v3/commentThreads?key=${apiKey}&textFormat=plainText&part=snippet&videoId=${videoID}&maxResults=1000&pageToken=${nextPageToken}`;
         const response = (await fetch(fetchURL));
         if (response.ok) {
-            const page : CommentThreadListResponse = await response.json();
+            const page : Root = await response.json();
             jsonPageData.push(page);
             nextPageToken = page.nextPageToken;
         } else {
