@@ -3,7 +3,7 @@ import { parseURL } from "./get_data";
 
 describe('parseURL', () => {
     it('should return the video ID from a YouTube URL', () => {
-        const videoID : String = "dQw4w9WgXcQ";
+        const videoID : string = "dQw4w9WgXcQ";
         const parsedData = parseURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
         expect(parsedData).toBe(videoID);
     })

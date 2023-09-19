@@ -6,10 +6,10 @@ import type { MasterDict } from "./process_data.d"
 const extractComment = (comment : Item) => comment.snippet.topLevelComment.snippet.textDisplay;
 
     // Convert each element in a string array into lowercase
-const convertToLowercase = (stringArray : String[]) => stringArray.map(t => t.toLowerCase());
+const convertToLowercase = (stringArray : string[]) => stringArray.map(t => t.toLowerCase());
 
     // Remove whitespace and emojis
-const removeUnwantedTokens = (comment : String) => {
+const removeUnwantedTokens = (comment : string) => {
     let res = comment.replace(
         /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
         ''
@@ -32,7 +32,7 @@ const extractTokensFromComment = (commentItem: Item) => {
 // EXPORT FUNCTIONS
     // From a vector of comment objects (the kind from the JSON api), flatten each comment into an array of extracted words and punctuations. 
 export const getDataMatrix = (extractedCommentDB : Root[]) => {
-    let res : String[][] = [];
+    let res : string[][] = [];
     extractedCommentDB.forEach((data: Root) => {
         const items = data.items;
         items.forEach((commentItem : Item) => {

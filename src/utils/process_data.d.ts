@@ -1,2 +1,2 @@
 export type MasterDict = WordDict[];
-type WordDict = Map<String, String[]>
+type WordDict = Map<string, string[]>
