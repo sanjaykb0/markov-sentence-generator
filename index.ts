@@ -4,7 +4,7 @@ import * as path from "path";
 
 import { getData, parseURL } from './src/utils/get_data';
 import { getDataMatrix } from './src/utils/process_data';
-import { trainMarkovModel } from "./src/utils/math";
+import { generateComment, trainMarkovModel } from "./src/utils/math";
 
 import type { Root } from './index.d';
 
@@ -43,5 +43,5 @@ const fetchData = async (url : string) => {
 
 const data : Root[] = getJSONDataFromFile();
 let m = getDataMatrix(data);
-const t = trainMarkovModel(m);
-console.log(t);
+
+const comment = generateComment(m);

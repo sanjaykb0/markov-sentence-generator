@@ -12,6 +12,7 @@ export const createInitVector = (data : string[][]) => {
 
 export const trainMarkovModel = (data : string[][]) => {
     let finalMatrix = {};
+    let initVector = createInitVector(data);
     data.forEach(commentArray => {
         if (commentArray.length > 1) {
             for (let i = 0; i < commentArray.length - 1; i++) {
@@ -28,11 +29,11 @@ export const trainMarkovModel = (data : string[][]) => {
         }
     })
     console.log("Model successfully trained");
-    return finalMatrix;
+    return { finalMatrix, initVector};
 }
 
 const getNextWord = (selectedWordVector: string[]) => {
-    let len = selectedWord.length();
+    let len = selectedWordVector.length;
     let res;
     try {
         let index = Math.floor(Math.random() * len);
@@ -46,7 +47,7 @@ const getNextWord = (selectedWordVector: string[]) => {
 }
 
 const convertToTitleCase = (s : string) => {
-    return s.replace(s[0], s[0].toUpperCase());
+    return s[0].toUpperCase() + s.slice(1);
 }
 
 const isPunctuation = (s : string) => {
@@ -71,12 +72,14 @@ const generateCommentArray = (mat : {prop: string[]}, delta : Number = 50, initi
         if (delta <= 15) {
             if (mat[nextWord].find((e) => e === '.')) {
                 res.push(".");
+                console.log("Comment generation successful.");
                 return res;
             }
         } 
 
         if (delta < 0) { // force push a "."
             res.push(".");
+            console.log("Comment generation successful.");
             return res;
         }
 
@@ -86,7 +89,7 @@ const generateCommentArray = (mat : {prop: string[]}, delta : Number = 50, initi
     }
 }
 
-const generateSentence = (resArray : string[]) => { // converts a resultant array into a proper comment 
+const joinArray = (resArray : string[]) => { // converts a resultant array into a proper comment 
     let finalComment = "";
     let nextWordIsCapital = false;
     resArray.forEach(word => {
@@ -105,4 +108,11 @@ const generateSentence = (resArray : string[]) => { // converts a resultant arra
         }
     })
     return finalComment.trim();
+}
+
+export const generateComment = (data : string[][], delta : Number = 50) => {
+    const { finalMatrix, initVector} = trainMarkovModel(data);
+    const initWord : string = getInitialWord(initVector);
+    const commentArray = generateCommentArray(finalMatrix, 50, initWord);
+    return joinArray(commentArray);
 }
