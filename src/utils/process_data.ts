@@ -39,5 +39,6 @@ export const getDataMatrix = (extractedCommentDB : Root[]) => {
             res.push(vec);
         })
     })
+    console.log("Data matrix created!");
     return res;
 }

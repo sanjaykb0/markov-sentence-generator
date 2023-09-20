@@ -1,12 +1,19 @@
 import dotenv from 'dotenv';
 import * as fs from "fs";
+import * as path from "path";
+
 import { getData, parseURL } from './src/utils/get_data';
+import { getDataMatrix } from './src/utils/process_data';
+import { trainMarkovModel } from "./src/utils/math";
+
 import type { Root } from './index.d';
 
 const serializeJSON = (data : Root[]) => {
+  const outPath = path.join(...import.meta.dir, 'models', 'data.json')
   const jsonString = JSON.stringify(data, null, 4);
   fs.writeFileSync('data.json', jsonString); 
 }
+
 
 const getJSONDataFromFile = () => {
   try { 
@@ -32,4 +39,9 @@ const fetchData = async (url : string) => {
   })
 }
 
-fetchData("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+// fetchData("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+
+const data : Root[] = getJSONDataFromFile();
+let m = getDataMatrix(data);
+const t = trainMarkovModel(m);
+console.log(t);

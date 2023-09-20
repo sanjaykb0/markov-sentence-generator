@@ -5,7 +5,7 @@ export const parseURL = (url : string) => {
     let match = url.match(r);
 
     if (match === null) {
-        return -1;
+        return false;
     }
 
     return match[1];
@@ -13,6 +13,7 @@ export const parseURL = (url : string) => {
 
 export const getData = async (videoID : string, apiKey : string | undefined) => { // adding "undefined" is an incredibly lazy fix. Replace ASAP!
     let jsonPageData : Root[] = []; 
+
     // const fetchURL = `https://www.googleapis.com/youtube/v3/commentThreads?key=${apiKey}&textFormat=plainText&part=snippet&videoId=${videoID}&maxResults=1000&pageToken=`;
     // const response = await fetch(fetchURL);
 
