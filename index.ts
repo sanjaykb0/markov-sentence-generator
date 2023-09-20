@@ -1,26 +1,35 @@
 import dotenv from 'dotenv';
-import { getData } from './src/utils/get_data';
+import * as fs from "fs";
+import { getData, parseURL } from './src/utils/get_data';
 import type { Root } from './index.d';
-dotenv.config();
 
-// for later
-// const server = Bun.serve({
-//     port: 3000,
-//     fetch(request) {
-//         return new Response('Hello world');
-//     }
-// })
-
-const requestData = async () => {
-    const url = Bun.argv[2];
-    const res : Root[] = await getData(url, process.env.NODE_ENV) //CommentThreadListResponse -> Potential point of failure
-        .catch(e => {
-            return Promise.reject(e);
-        })
-        .then(response => {
-            return Promise.resolve(response);
-        })
-    console.log(res); // Needs to be tested!
+const serializeJSON = (data : Root[]) => {
+  const jsonString = JSON.stringify(data, null, 4);
+  fs.writeFileSync('data.json', jsonString); 
 }
 
-// requestData();
+const getJSONDataFromFile = () => {
+  try { 
+    const jsonString = fs.readFileSync('data.json', 'utf-8')
+    return JSON.parse(jsonString);
+
+  } catch (e) {
+    console.log('File does not exist!');
+  }
+}
+
+const fetchData = async (url : string) => {
+  const videoID = parseURL(url);
+  if (!videoID) {
+    return Promise.reject("Invalid URL")
+  }
+  await getData(videoID, process.env.API_KEY)
+  .then(t => {
+    serializeJSON(t);
+    console.log("Successfully written to file: 'data.json'")
+  }).catch(e => {
+    console.log(e);
+  })
+}
+
+fetchData("https://www.youtube.com/watch?v=dQw4w9WgXcQ")

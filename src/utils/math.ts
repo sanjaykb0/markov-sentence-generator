@@ -1,8 +1,6 @@
 //@ts-nocheck
 // very dangerous code incoming
 
-import { randomInt } from "crypto";
-
 export const createInitVector = (data : string[][]) => {
     return data.reduce((res, commentArray) => {
         if (commentArray[0].length > 1) {

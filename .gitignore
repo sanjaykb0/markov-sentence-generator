@@ -169,3 +169,4 @@ dist
 
 # IntelliJ based IDEs
 .idea
+data.json
