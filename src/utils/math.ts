@@ -4,7 +4,7 @@
 export const createInitVector = (data : string[][]) => {
     return data.reduce((res, commentArray) => {
         if (commentArray[0].length > 1) {
-            res.push(commentArray);
+            res.push(commentArray[0]);
         }
         return res;
     }, [])
@@ -28,19 +28,20 @@ export const trainMarkovModel = (data : string[][]) => {
             }
         }
     })
+
     console.log("Model successfully trained");
     return { finalMatrix, initVector};
 }
 
 const getNextWord = (selectedWordVector: string[]) => {
-    let len = selectedWordVector.length;
     let res;
     try {
+        let len = selectedWordVector.length;
         let index = Math.floor(Math.random() * len);
         res = selectedWordVector[index];
     }
     catch (e) {
-        throw e;
+        return -1;
     }
 
     return res;
@@ -62,27 +63,22 @@ const isPunctuation = (s : string) => {
     return false;
 }
 
-const getInitialWord = (initVector : string[]) => convertToTitleCase(getNextWord(initVector));
+const getInitialWord = (initVector : string[]) => {
+    return getNextWord(initVector);
+};
 
 const generateCommentArray = (mat : {prop: string[]}, delta : Number = 50, initialWord : string)=> {
-    let res : string[] = [initialWord];
+    let res : string[] = [convertToTitleCase(initialWord)];
     let nextWord = getNextWord(mat[initialWord]);
+
     res.push(nextWord);
     while (true) {
         if (delta <= 15) {
             if (mat[nextWord].find((e) => e === '.')) {
                 res.push(".");
-                console.log("Comment generation successful.");
                 return res;
             }
         } 
-
-        if (delta < 0) { // force push a "."
-            res.push(".");
-            console.log("Comment generation successful.");
-            return res;
-        }
-
         nextWord = getNextWord(mat[nextWord]);
         res.push(nextWord);
         delta--;
@@ -112,7 +108,14 @@ const joinArray = (resArray : string[]) => { // converts a resultant array into 
 
 export const generateComment = (data : string[][], delta : Number = 50) => {
     const { finalMatrix, initVector} = trainMarkovModel(data);
-    const initWord : string = getInitialWord(initVector);
+    let initWord : string = getInitialWord(initVector);
+
+    // bad fix but this is necessary to remove useless initial words.
+    while (finalMatrix[initWord] === undefined || finalMatrix[initWord].length === 0) {
+        initWord = getInitialWord(initVector);
+    }
+    let t : string = initWord;
+
     const commentArray = generateCommentArray(finalMatrix, 50, initWord);
     return joinArray(commentArray);
 }

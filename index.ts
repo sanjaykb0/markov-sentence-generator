@@ -9,7 +9,6 @@ import { generateComment, trainMarkovModel } from "./src/utils/math";
 import type { Root } from './index.d';
 
 const serializeJSON = (data : Root[]) => {
-  const outPath = path.join(...import.meta.dir, 'models', 'data.json')
   const jsonString = JSON.stringify(data, null, 4);
   fs.writeFileSync('data.json', jsonString); 
 }
@@ -43,5 +42,4 @@ const fetchData = async (url : string) => {
 
 const data : Root[] = getJSONDataFromFile();
 let m = getDataMatrix(data);
-
-const comment = generateComment(m);
+console.log(generateComment(m))
