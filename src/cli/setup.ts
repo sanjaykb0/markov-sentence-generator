@@ -9,11 +9,20 @@ export const prompt = () => {
             break;
 
         case "generate":
-            // return comment generate logic
+            if (data[1]) {
+                actions.generateCLI(data[1])
+            } else {
+                actions.generateCLI()
+            }
             break;
 
-        case "configure":
+        case "config":
             // return current configuration
+            if (data[2]) {
+                actions.configCLI(data[2]);
+            } else {
+                actions.helpCLI();
+            }
             break;
         
         default: 

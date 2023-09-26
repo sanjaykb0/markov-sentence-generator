@@ -29,14 +29,16 @@ export const generateCLI = async (url? : string) => {
     let data : Root[] = await getModelFromFile();
     let m = await getDataMatrix(data)
 
+
     console.log(generateComment(m));
 }
 
 export const configCLI = async (apiKey : string) => {
     await saveConfig(apiKey)
-        .then((s) => { return s })
+        .then((s) => { console.log("Successfully updated configuration")})
         .catch((e) => { throw(e)})
 }
+
 
 const validateEnvVars = async (envVars: string[]) => {
     let parsedVar = envVars[0].split("=")[0];

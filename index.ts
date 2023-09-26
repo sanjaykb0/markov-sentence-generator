@@ -49,13 +49,4 @@ const main = async () => {
 // main();
 // prompt();
 
-const m2 = async () => {
-  // const file = Bun.file('.env');
-  // const text = await file.text()
-  // console.log(text.split("\n"));
-
-  saveConfig("AIzaSyAXkCsX5LgTZGnEAp-MKDI9rFHVgwBHrwg");
-
-}
-
-m2();
+prompt();

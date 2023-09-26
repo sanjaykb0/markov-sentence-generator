@@ -29,12 +29,13 @@ export const trainMarkovModel = (data : string[][]) => {
         }
     })
 
-    console.log("Model successfully trained");
+    // console.log("Model successfully trained");
     return { finalMatrix, initVector};
 }
 
 const getNextWord = (selectedWordVector: string[]) => {
     let res;
+    console.log(selectedWordVector)
     try {
         let len = selectedWordVector.length;
         let index = Math.floor(Math.random() * len);
@@ -43,7 +44,6 @@ const getNextWord = (selectedWordVector: string[]) => {
     catch (e) {
         return -1;
     }
-
     return res;
 }
 
@@ -69,9 +69,11 @@ const getInitialWord = (initVector : string[]) => {
 
 const generateCommentArray = (mat : {prop: string[]}, delta : Number = 50, initialWord : string)=> {
     let res : string[] = [convertToTitleCase(initialWord)];
-    let nextWord = getNextWord(mat[initialWord]);
 
+    let tmp = getNextWord(mat[initialWord])
+    let nextWord = tmp;
     res.push(nextWord);
+
     while (true) {
         if (delta <= 15) {
             if (mat[nextWord].find((e) => e === '.')) {
@@ -79,7 +81,11 @@ const generateCommentArray = (mat : {prop: string[]}, delta : Number = 50, initi
                 return res;
             }
         } 
+
         nextWord = getNextWord(mat[nextWord]);
+
+        console.log(`${nextWord} : ${mat[nextWord]}`);
+
         res.push(nextWord);
         delta--;
     }
