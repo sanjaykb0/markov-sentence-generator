@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
-import * as fs from "fs";
-import * as path from "path";
+import { prompt } from './src/cli/setup'
 
 import { getData, parseURL } from './src/utils/get_data';
 import { getDataMatrix } from './src/utils/process_data';
@@ -8,20 +7,21 @@ import { generateComment, trainMarkovModel } from "./src/utils/math";
 
 import type { Root } from './index.d';
 
+
+
 const serializeJSON = (data : Root[]) => {
   const jsonString = JSON.stringify(data, null, 4);
-  fs.writeFileSync('data.json', jsonString); 
+  Bun.write('data.json', jsonString); 
 }
 
+const getJSONDataFromFile = async () => {
+    // const jsonString = fs.readFileSync('data.json', 'utf-8')
+    const file = Bun.file('data.json');
+    const t : Root[] = await file.json()
+    .then((s) => {return s})
+    .catch((e) => {throw(e)})
 
-const getJSONDataFromFile = () => {
-  try { 
-    const jsonString = fs.readFileSync('data.json', 'utf-8')
-    return JSON.parse(jsonString);
-
-  } catch (e) {
-    console.log('File does not exist!');
-  }
+    return t;
 }
 
 const fetchData = async (url : string) => {
@@ -38,8 +38,13 @@ const fetchData = async (url : string) => {
   })
 }
 
-// fetchData("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 
-const data : Root[] = getJSONDataFromFile();
-let m = getDataMatrix(data);
-console.log(generateComment(m))
+const main = async () => {
+  // fetchData("https://www.youtube.com/watch?v=DxL2HoqLbyA");
+  let data = await getJSONDataFromFile();
+  let m = getDataMatrix(data);
+  console.log(generateComment(m))
+}
+
+// main();
+prompt();
