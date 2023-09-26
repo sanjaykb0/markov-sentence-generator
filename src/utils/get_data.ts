@@ -43,7 +43,6 @@ export const fetchData = async (url : string) => {
   }
   await getData(videoID, process.env.API_KEY)
   .then(t => {
-    console.log("Successfully fetched data.")
     serializeModel(t);
   }).catch(e => {
     throw(e);

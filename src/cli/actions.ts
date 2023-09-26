@@ -24,6 +24,8 @@ export const generateCLI = async (url? : string) => {
     if (url) {
         await fetchData(url)
             .catch(e => {throw(e)})
+        console.log("Successfully created model.")
+        return;
     }
 
     let data : Root[] = await getModelFromFile();

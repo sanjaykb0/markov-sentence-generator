@@ -35,7 +35,6 @@ export const trainMarkovModel = (data : string[][]) => {
 
 const getNextWord = (selectedWordVector: string[]) => {
     let res;
-    console.log(selectedWordVector)
     try {
         let len = selectedWordVector.length;
         let index = Math.floor(Math.random() * len);
@@ -75,6 +74,9 @@ const generateCommentArray = (mat : {prop: string[]}, delta : Number = 50, initi
     res.push(nextWord);
 
     while (true) {
+        if (mat[nextWord] === undefined) {
+            return res;
+        }
         if (delta <= 15) {
             if (mat[nextWord].find((e) => e === '.')) {
                 res.push(".");
@@ -84,7 +86,7 @@ const generateCommentArray = (mat : {prop: string[]}, delta : Number = 50, initi
 
         nextWord = getNextWord(mat[nextWord]);
 
-        console.log(`${nextWord} : ${mat[nextWord]}`);
+        // console.log(`${nextWord} : ${mat[nextWord]}`);
 
         res.push(nextWord);
         delta--;
