@@ -6,6 +6,7 @@ import { getDataMatrix } from './src/utils/process_data';
 import { generateComment, trainMarkovModel } from "./src/utils/math";
 
 import type { Root } from './index.d';
+import { saveConfig } from './src/fs/env_functions';
 
 
 
@@ -32,7 +33,6 @@ const fetchData = async (url : string) => {
   await getData(videoID, process.env.API_KEY)
   .then(t => {
     serializeJSON(t);
-    console.log("Successfully written to file: 'data.json'")
   }).catch(e => {
     console.log(e);
   })
@@ -41,10 +41,21 @@ const fetchData = async (url : string) => {
 
 const main = async () => {
   // fetchData("https://www.youtube.com/watch?v=DxL2HoqLbyA");
-  let data = await getJSONDataFromFile();
-  let m = getDataMatrix(data);
-  console.log(generateComment(m))
+  let data = await getJSONDataFromFile().then(t => t).catch(e => {throw(e)});
+  let mat = await getDataMatrix(data).then(t => t).catch(e => {throw(e)})
+  console.log(generateComment(mat))
 }
 
 // main();
-prompt();
+// prompt();
+
+const m2 = async () => {
+  // const file = Bun.file('.env');
+  // const text = await file.text()
+  // console.log(text.split("\n"));
+
+  saveConfig("AIzaSyAXkCsX5LgTZGnEAp-MKDI9rFHVgwBHrwg");
+
+}
+
+m2();

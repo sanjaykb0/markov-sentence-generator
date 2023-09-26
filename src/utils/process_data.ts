@@ -30,15 +30,19 @@ export const extractTokensFromComment = (commentItem: Item) => {
 
 // EXPORT FUNCTIONS
     // From a vector of comment objects (the kind from the JSON api), flatten each comment into an array of extracted words and punctuations. 
-export const getDataMatrix = (extractedCommentDB : Root[]) => {
+export const getDataMatrix = async (extractedCommentDB : Root[]) => {
     let res : string[][] = [];
-    extractedCommentDB.forEach((data: Root) => {
-        const items = data.items;
-        items.forEach((commentItem : Item) => {
-            let vec = extractTokensFromComment(commentItem);
-            res.push(vec);
+    try {
+        extractedCommentDB.forEach((data: Root) => {
+            const items = data.items;
+            items.forEach((commentItem : Item) => {
+                let vec = extractTokensFromComment(commentItem);
+                res.push(vec);
+            })
         })
-    })
-    console.log("Data matrix created!");
-    return res;
+        return Promise.resolve(res);
+    }
+    catch(e) {
+        return Promise.reject(e);
+    }
 }

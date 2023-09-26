@@ -1,4 +1,5 @@
 import type { CommentThreadListResponse, Root } from "../../index.d";
+import { serializeModel } from "../fs/models";
 
 export const parseURL = (url : string) => {
     const r = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/
@@ -33,4 +34,17 @@ export const getData = async (videoID : string, apiKey : string | undefined) => 
     }
 
     return Promise.resolve(jsonPageData);
+}
+
+export const fetchData = async (url : string) => {
+  const videoID = parseURL(url);
+  if (!videoID) {
+    return Promise.reject("Invalid URL")
+  }
+  await getData(videoID, process.env.API_KEY)
+  .then(t => {
+    serializeModel(t);
+  }).catch(e => {
+    throw(e);
+  })
 }
