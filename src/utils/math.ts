@@ -29,7 +29,6 @@ export const trainMarkovModel = (data : string[][]) => {
         }
     })
 
-    // console.log("Model successfully trained");
     return { finalMatrix, initVector};
 }
 

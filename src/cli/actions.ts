@@ -1,14 +1,16 @@
-import { getModelFromFile, serializeModel } from "../fs/models";
+// This file describes CLI actions / dialogues
+
+import { getModelFromFile } from "../fs/models";
 import { Root } from "../../index.d";
 import { fetchData } from "../utils/get_data";
 import { getDataMatrix } from "../utils/process_data";
 import { generateComment } from "../utils/math";
 import { unlink } from "node:fs";
 import { clearCfgFile, saveConfig } from "../fs/env_functions";
-// Help dialogue 
 
+// Help dialogue
 export const helpCLI = (isRecognized : boolean = true, t? : string) => { 
-    if (!isRecognized) {
+    if (!isRecognized) { // adds the below line whenever the user arg is not valid
         console.log(`Command "${t}" not recognized.`)
     }
     console.log("Usage: markov <command>");
@@ -20,6 +22,7 @@ export const helpCLI = (isRecognized : boolean = true, t? : string) => {
     console.log("  help\t\t\t\t Opens this dialogue")
 }
 
+// Comment generation CLI
 export const generateCLI = async (url? : string) => {
     if (url) {
         await fetchData(url)

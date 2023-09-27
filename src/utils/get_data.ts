@@ -18,18 +18,22 @@ export const getData = async (videoID : string, apiKey : string | undefined) => 
     // const fetchURL = `https://www.googleapis.com/youtube/v3/commentThreads?key=${apiKey}&textFormat=plainText&part=snippet&videoId=${videoID}&maxResults=1000&pageToken=`;
     // const response = await fetch(fetchURL);
 
-    let pageCount = 10;
+    let pageCount = 300;
     let nextPageToken = "";
 
     for (let i = 0; i < pageCount; i++) {
         const fetchURL = `https://www.googleapis.com/youtube/v3/commentThreads?key=${apiKey}&textFormat=plainText&part=snippet&videoId=${videoID}&maxResults=1000&pageToken=${nextPageToken}`;
         const response = (await fetch(fetchURL));
+
+        if (i % 5 == 0) {
+          console.log(`${Math.round((i / pageCount) * 100) }% Completed`)
+        }
         if (response.ok) {
             const page : Root = await response.json();
             jsonPageData.push(page);
             nextPageToken = page.nextPageToken;
         } else {
-            return Promise.reject(`Error with fetching JSON data at page ${i + 1}.`);
+            return Promise.resolve(jsonPageData);
         }
     }
 
