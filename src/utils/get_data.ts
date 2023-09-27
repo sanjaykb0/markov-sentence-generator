@@ -21,18 +21,18 @@ export const getData = async (videoID : string, apiKey : string | undefined) => 
     let pageCount = 300;
     let nextPageToken = "";
 
+    console.log("Generating comment model...")
+
     for (let i = 0; i < pageCount; i++) {
         const fetchURL = `https://www.googleapis.com/youtube/v3/commentThreads?key=${apiKey}&textFormat=plainText&part=snippet&videoId=${videoID}&maxResults=1000&pageToken=${nextPageToken}`;
         const response = (await fetch(fetchURL));
+        console.log(i + 1)
 
-        if (i % 5 == 0) {
-          console.log(`${Math.round((i / pageCount) * 100) }% Completed`)
-        }
         if (response.ok) {
             const page : Root = await response.json();
             jsonPageData.push(page);
-            nextPageToken = page.nextPageToken;
         } else {
+            console.log(nextPageToken)
             return Promise.resolve(jsonPageData);
         }
     }
