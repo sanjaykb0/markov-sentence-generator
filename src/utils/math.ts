@@ -18,8 +18,6 @@ export const trainMarkovModel = (data : string[][]) => {
             for (let i = 0; i < commentArray.length - 1; i++) {
                 let word = commentArray[i];
                 let next = commentArray[i + 1]
-
-                // what could possibly go wrong?
                 try {
                     finalMatrix[word].push(next);
                 } catch {
@@ -76,6 +74,8 @@ const generateCommentArray = (mat : {prop: string[]}, delta : Number = 50, initi
         if (mat[nextWord] === undefined) {
             return res;
         }
+
+        if (delta < 1) return res;
         if (delta <= 15) {
             if (mat[nextWord].find((e) => e === '.')) {
                 res.push(".");

@@ -1,15 +1,18 @@
+// The final prompt
+
 import * as actions from "./actions"
 
 export const prompt = () => {
     const data = Bun.argv.slice(2);
 
     switch (data[0]) {
-        case "help" || "-help" || "--help":
+        //@ts-ignore
+        case  "-help" || "--help":
             actions.helpCLI();
             break;
 
         case "generate":
-            if (data[1]) {
+            if (data[1]) { // If 
                 actions.generateCLI(data[1])
             } else {
                 actions.generateCLI()

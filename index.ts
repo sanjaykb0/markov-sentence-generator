@@ -38,15 +38,4 @@ const fetchData = async (url : string) => {
   })
 }
 
-
-const main = async () => {
-  // fetchData("https://www.youtube.com/watch?v=DxL2HoqLbyA");
-  let data = await getJSONDataFromFile().then(t => t).catch(e => {throw(e)});
-  let mat = await getDataMatrix(data).then(t => t).catch(e => {throw(e)})
-  console.log(generateComment(mat))
-}
-
-// main();
-// prompt();
-
 prompt();
